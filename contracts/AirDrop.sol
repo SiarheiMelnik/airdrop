@@ -3,7 +3,7 @@
 
 pragma solidity ^0.4.15;
 import "./Ownable.sol";
-import "./KyberGenesisToken.sol";
+import "./KyberGenesisToken.sol"; // how to connect to existing token for minting??? From API? or it's better to just send an ammount of tokens to this contract and use them for airdroping?
 
 contract AirDrop is Ownable {
   uint public numDrops;
@@ -14,7 +14,7 @@ contract AirDrop is Ownable {
   }
 
   event TokenDrop( address receiver, uint amount );
-  function airDrop( ERC20Interface token,
+  function airDrop( ERC20 token,
                     address   tokenRepo,
                     address[] recipients,
                     uint amount,
