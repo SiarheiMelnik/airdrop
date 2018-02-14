@@ -28,7 +28,7 @@ contract AirDrop is Ownable {
           TokenDrop( recipients[i], amount );
       }
     }
-
+// тут логику хуйнуть надо
     if( kgt ) {
       kgtToken.mint(recipients);
     }
@@ -37,11 +37,11 @@ contract AirDrop is Ownable {
     dropAmount += recipients.length * amount;
   }
 
-  function tranferMinterOwnership( KyberGenesisToken kgtToken, address newOwner ) onlyOwner {
-    kgtToken.transferOwnership(newOwner);
+  function tranferMinterOwnership(  CustomToke cusToken, address newOwner ) onlyOwner {
+    cusToken.transferOwnership(newOwner);
   }
 
-  function emergencyERC20Drain( ERC20Interface token, uint amount,address _emergencyDrainAddress ) onlyOwner {
+  function emergencyERC20Drain( ERC20 token, uint amount,address _emergencyDrainAddress ) onlyOwner {
       // callable only by owner
       emergencyDrainAddress = _emergencyDrainAddress;
       token.transfer( emergencyDrainAddress, amount );
