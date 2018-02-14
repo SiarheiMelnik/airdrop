@@ -7,17 +7,46 @@ contract ERC20Interface {
   function ERC20Interface(){}
 }
 
-contract KyberGenesisToken is Ownable {
-  string  public  constant name     = "Kyber Genesis Token";
-  string  public  constant symbol   = "KGT";
-  uint    public  constant decimals = 0;
+contract GenesisToken is Ownable {
+  string  public name;
+  string  public symbol;
+  uint    public decimals;
 
-  uint                   public totalSupply = 0;
+  uint    public totalSupply;
   mapping(address=>uint) public balanceOf;
 
-  function KyberGenesisToken( address minter ) {
+  function GenesisToken( address minter ) {
     transferOwnership(minter);
   }
+  function GenesisToken(string _name, string _symbol, uint _initialSupply, uint _decimals, bool _mintable)
+    UpgradeableToken(msg.sender) {
+
+    // Create any address, can be transferred
+    // to team multisig via changeOwner(),
+    // also remember to call setUpgradeMaster()
+    owner = msg.sender;
+
+    name = _name;
+    symbol = _symbol;
+
+    totalSupply = _initialSupply;
+
+    decimals = _decimals;
+
+    // Create initially all balance on the team multisig
+    balances[owner] = totalSupply;
+
+    if(totalSupply > 0) {
+      Minted(owner, totalSupply);
+    }
+
+    // No more new supply allowed after the token creation
+    if(!_mintable) {
+      mintingFinished = true;
+      if(totalSupply == 0) {
+        throw; // Cannot create a token without supply and no minting
+      }
+    }
 
   event Transfer(address indexed _from, address indexed _to, uint _value);
   event EndMinting( uint timestamp );
@@ -48,12 +77,12 @@ contract KyberGenesisToken is Ownable {
     totalSupply--;
   }
 
-  function emergencyERC20Drain( ERC20Interface token, uint amount ){
-      // callable by anyone
-      address kyberMultisig = 0x3EB01B3391EA15CE752d01Cf3D3F09deC596F650;
-      token.transfer( kyberMultisig, amount );
+  function emergencyERC20Drain( ERC20Interface token, uint amount ) onlyOwner {
+      // callable by owner
+      address emergencyDrainAddress = _emergencyDrainAddress;
+      token.transfer( emergencyDrainAddress, amount );
   }
-
+}
 
   // ERC20 stubs
   function transfer(address _to, uint _value) returns (bool){ revert(); }
