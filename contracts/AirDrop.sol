@@ -12,14 +12,14 @@ contract AirDrop is Ownable {
   function AirDrop( address dropper ) {
     transferOwnership(dropper);
   }
-
+// tokenRepo я так понимая это и есть то куды надо сыпать при инициализации??
   event TokenDrop( address receiver, uint amount );
   function airDrop( ERC20 token,
                     address   tokenRepo,
                     address[] recipients,
                     uint amount,
                     bool ihs,
-                    KyberGenesisToken kgtToken ) onlyOwner {
+                    CustomToken cusToken ) onlyOwner {
     require( amount == 0 || amount == (2*(10**18)) || amount == (5*(10**18)) );
 
     if( amount > 0 ) {
@@ -29,15 +29,15 @@ contract AirDrop is Ownable {
       }
     }
 // тут логику хуйнуть надо
-    if( kgt ) {
-      kgtToken.mint(recipients);
+    if( cus ) {
+      cusToken.mint(recipients);
     }
 
     numDrops += recipients.length;
     dropAmount += recipients.length * amount;
   }
 
-  function tranferMinterOwnership(  CustomToke cusToken, address newOwner ) onlyOwner {
+  function tranferMinterOwnership(  CustomToken cusToken, address newOwner ) onlyOwner {
     cusToken.transferOwnership(newOwner);
   }
 
