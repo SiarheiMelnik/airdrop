@@ -18,7 +18,7 @@ contract AirDrop is Ownable {
                     address   tokenRepo,
                     address[] recipients,
                     uint amount,
-                    bool PoA, // If PoA on balance
+                    bool POA, // If PoA on balance
                     CustomToken cusToken ) onlyOwner {
     require( amount == 0 || amount == (2*(10**18)) || amount == (5*(10**18)) ); //воткнуть переменную мин занчение и макс(кол-во токенов) Тту от 2 до 5 если есть.
 
@@ -29,7 +29,7 @@ contract AirDrop is Ownable {
       }
     }
 // тут логику хуйнуть надо
-    if( cus ) {
+    if( POA ) {
       cusToken.mint(recipients);
     }
 
