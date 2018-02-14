@@ -8,7 +8,7 @@ import "./KyberGenesisToken.sol"; // how to connect to existing token for mintin
 contract AirDrop is Ownable {
   uint public numDrops;
   uint public dropAmount;
-
+// непонятно зачем права ниже уходят??? нах? на dropper? и чьи? ownership of token? 
   function AirDrop( address dropper ) {
     transferOwnership(dropper);
   }
