@@ -1,12 +1,15 @@
+// Created using KyberAirDrop contract https://github.com/KyberNetwork/airdrop 
+// Modyfied by YouTweak.iT https://github.com/youtweakit/airdrop for Token Wizard Usage
+
 pragma solidity ^0.4.15;
 import "./Ownable.sol";
 import "./KyberGenesisToken.sol";
 
-contract KyberAirDrop is Ownable {
+contract AirDrop is Ownable {
   uint public numDrops;
   uint public dropAmount;
 
-  function KyberAirDrop( address dropper ) {
+  function AirDrop( address dropper ) {
     transferOwnership(dropper);
   }
 
@@ -15,7 +18,7 @@ contract KyberAirDrop is Ownable {
                     address   tokenRepo,
                     address[] recipients,
                     uint amount,
-                    bool kgt,
+                    bool ihs,
                     KyberGenesisToken kgtToken ) onlyOwner {
     require( amount == 0 || amount == (2*(10**18)) || amount == (5*(10**18)) );
 
@@ -38,9 +41,9 @@ contract KyberAirDrop is Ownable {
     kgtToken.transferOwnership(newOwner);
   }
 
-  function emergencyERC20Drain( ERC20Interface token, uint amount ) {
-      // callable by anyone
-      address kyberMultisig = 0x3EB01B3391EA15CE752d01Cf3D3F09deC596F650;
-      token.transfer( kyberMultisig, amount );
+  function emergencyERC20Drain( ERC20Interface token, uint amount,address _emergencyDrainAddress ) onlyOwner {
+      // callable only by owner
+      emergencyDrainAddress = _emergencyDrainAddress;
+      token.transfer( emergencyDrainAddress, amount );
   }
 }
